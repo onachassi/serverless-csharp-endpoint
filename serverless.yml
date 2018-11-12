@@ -1,0 +1,27 @@
+service: aws-csharp-web-scraper 
+provider:
+  name: aws
+  runtime: dotnetcore2.1
+  stage: dev
+  region: us-west-1
+
+package:
+  artifact: bin/release/netcoreapp2.1/deploy-package.zip
+
+functions:
+  scrape:
+    handler: CsharpHandlers::AwsDotnetCsharp.Handler::Scrape
+    events:
+      - http:
+          path: scrape
+          method: post
+          cors: 
+            origin: '*'
+            headers:
+              - Access-Control-Allow-Origin
+              - Content-Type
+            allowCredentials: false
+          request:
+            parameters:
+              body:
+                url: true
